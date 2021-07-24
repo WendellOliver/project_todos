@@ -29,6 +29,17 @@ export default class UsersController{
     public async create( request: Request, response: Response){
         const {name, email, cpf, birthdate} = request.body;
 
+        const userFindall = users.find((user: any)=>{
+            return user.name===name,
+            user.email===email, 
+            user.cpf===cpf,
+            user.birthdate===birthdate
+        });
+
+        if(userFindall){
+            return response.status(200).json(userFindall);
+        }
+
         const userFinded = users.find((user: any)=>{
             return user.cpf===cpf
            });
@@ -36,8 +47,6 @@ export default class UsersController{
            if(userFinded){
             return response.status(200).json(userFinded);
            }
-
-
 
         const user = {
             id: uuid(),
@@ -57,10 +66,32 @@ export default class UsersController{
     public async search(request: Request, response: Response){
         const {cpf} = request.headers;
 
-     const user = users.find((user: any)=>{
-         return user.cpf===cpf
-        });
+        if(cpf){
+            const user = users.find((user: any)=>{
+                return user.cpf===cpf
+               });
+       
+                return response.status(200).json(user);
+        }
 
-         return response.status(200).json(user);
+            return response.status(200).json(users);
+        
     }
+
+    public async find(request: Request,response: Response){
+        var data = new Date();
+        
+        var data = new Date();
+        var dia = String(data.getDate()).padStart(2, '0');
+        var mes = String(data.getMonth() + 1).padStart(2, '0');
+        var ano = data.getFullYear();
+        var dataAtual = dia + '/' + mes + '/' + ano;
+            
+        return response.status(200).json(dataAtual);
+        
+    }
+    
 }
+
+
+
