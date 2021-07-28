@@ -23,17 +23,17 @@ interface iusers{
     }
 }
 
-const users = <any>[];
+const users: iusers[] = [];
 
 export default class UsersController{
     public async create( request: Request, response: Response){
-        const {name, email, cpf, birthdate} = request.body;
+        const {name, email, cpf, birthDate} = request.body;
 
         const userFindall = users.find((user: any)=>{
             return user.name===name,
             user.email===email, 
             user.cpf===cpf,
-            user.birthdate===birthdate
+            user.birthDate===birthDate
         });
 
         if(userFindall){
@@ -53,9 +53,8 @@ export default class UsersController{
             name,
             email,
             cpf,
-            birthdate,
-            address: {},
-            todos: []
+            birthDate,
+            
         }
 
         users.push(user);
@@ -79,16 +78,33 @@ export default class UsersController{
     }
 
     public async find(request: Request,response: Response){
-        var data = new Date();
-        
-        var data = new Date();
-        var dia = String(data.getDate()).padStart(2, '0');
-        var mes = String(data.getMonth() + 1).padStart(2, '0');
-        var ano = data.getFullYear();
-        var dataAtual = dia + '/' + mes + '/' + ano;
+        const data = new Date();
+        const sdia = String(data.getDate()).padStart(2, '0');
+        const smes = String(data.getMonth() + 1).padStart(2, '0');
+        const ano = data.getFullYear();
+        const dia = parseInt(sdia);
+        const mes = parseInt(smes);
+        const dataAtual = dia + '/' + mes + '/' + ano;
+
+        users.forEach(user => {
+            const userDate = user.birthDate.toString();
+            const Dia = userDate.substring(8,10);
+            const Mes = userDate.substring(5,7);
+            const Ano = userDate.substring(0,4);
+            const userDia = parseInt(Dia);
+            const userMes = parseInt(Mes);
+            const userAno = parseInt(Ano);
+            const qano = userAno - ano;
             
+                if( mes < userMes|| mes == userMes && dia < userDia){
+                    ;
+                }
+        });
+
+
+
         return response.status(200).json(dataAtual);
-        
+
     }
     
 }
