@@ -85,6 +85,7 @@ export default class UsersController{
         const dia = parseInt(sdia);
         const mes = parseInt(smes);
         const dataAtual = dia + '/' + mes + '/' + ano;
+        const usersAux : iusers[] = [] 
 
         users.forEach(user => {
             const userDate = user.birthDate.toString();
@@ -100,19 +101,13 @@ export default class UsersController{
                     qano--;
                 }
                 
-                var usersAux = []
-                
                 if(qano >= 18 ){
                     usersAux.push(user); 
-                }else{
-                    
                 }
-                                
+                
         });
 
-
-
-        return response.status(200).json(users)
+        return response.status(200).json(usersAux);
 
     }
     
