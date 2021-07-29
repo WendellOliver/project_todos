@@ -94,16 +94,25 @@ export default class UsersController{
             const userDia = parseInt(Dia);
             const userMes = parseInt(Mes);
             const userAno = parseInt(Ano);
-            const qano = userAno - ano;
+            var qano = ano - userAno;
             
                 if( mes < userMes|| mes == userMes && dia < userDia){
-                    ;
+                    qano--;
                 }
+                
+                var usersAux = []
+                
+                if(qano >= 18 ){
+                    usersAux.push(user); 
+                }else{
+                    
+                }
+                                
         });
 
 
 
-        return response.status(200).json(dataAtual);
+        return response.status(200).json(users)
 
     }
     
