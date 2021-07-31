@@ -54,7 +54,6 @@ export default class UsersController{
             email,
             cpf,
             birthDate,
-            
         }
 
         users.push(user);
