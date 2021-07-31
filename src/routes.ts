@@ -11,4 +11,6 @@ routes.get("/users", usersController.search);
 
 routes.get("/age", usersController.find);
 
+routes.get("/order", usersController.order);
+
 export {routes};

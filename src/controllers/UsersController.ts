@@ -29,16 +29,16 @@ export default class UsersController{
     public async create( request: Request, response: Response){
         const {name, email, cpf, birthDate} = request.body;
 
-        const userFindall = users.find((user: any)=>{
-            return user.name===name,
-            user.email===email, 
-            user.cpf===cpf,
-            user.birthDate===birthDate
-        });
+        // const userFindall = users.find((user: any)=>{
+        //     return user.name===name,
+        //     user.email===email, 
+        //     user.cpf===cpf,
+        //     user.birthDate===birthDate
+        // });
 
-        if(userFindall){
-            return response.status(200).json(userFindall);
-        }
+        // if(userFindall){
+        //     return response.status(200).json(userFindall);
+        // }
 
         const userFinded = users.find((user: any)=>{
             return user.cpf===cpf
@@ -110,6 +110,37 @@ export default class UsersController{
 
     }
     
+    public async order(request: Request,response: Response){
+        const { order } = request.headers;
+        
+        if(order === "desc"){
+            users.sort(function (a, b) {
+                var nameA = a.name.toUpperCase();
+                var nameB = b.name.toUpperCase();
+                if (nameA < nameB) {
+                    return 1;
+                }
+                if (nameA > nameB) {
+                    return -1;
+                }
+                return 0;
+                });
+        }else{
+            for(var i = 0; i < users.length; i++) {
+                for(var j=0; j < users.length; j++) {
+                    if(users[i].name.toUpperCase() < users[j].name.toUpperCase()) {
+                        var temp = users[i].name;
+                        users[i].name = users[j].name;
+                        users[j].name = temp;
+                    }
+                }
+            }
+        }
+
+            return response.status(200).json(users);
+        
+    }
+
 }
 
 
