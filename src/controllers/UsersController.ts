@@ -29,24 +29,24 @@ export default class UsersController{
     public async create( request: Request, response: Response){
         const {name, email, cpf, birthDate} = request.body;
 
-        // const userFindall = users.find((user: any)=>{
-        //     return user.name===name,
-        //     user.email===email, 
-        //     user.cpf===cpf,
-        //     user.birthDate===birthDate
-        // });
+        const userFindall = users.find((user: any)=>{
+            return user.name===name,
+            user.email===email, 
+            user.cpf===cpf,
+            user.birthDate===birthDate
+        });
 
-        // if(userFindall){
-        //     return response.status(200).json(userFindall);
-        // }
+        if(userFindall){
+            return response.status(200).json(userFindall);
+        }
 
         const userFinded = users.find((user: any)=>{
             return user.cpf===cpf
-           });
+        });
 
-           if(userFinded){
+        if(userFinded){
             return response.status(200).json(userFinded);
-           }
+        }
 
         const user = {
             id: uuid(),
@@ -67,8 +67,7 @@ export default class UsersController{
         if(cpf){
             const user = users.find((user: any)=>{
                 return user.cpf===cpf
-               });
-       
+            });
                 return response.status(200).json(user);
         }
 
@@ -141,7 +140,23 @@ export default class UsersController{
         
     }
 
-}
+    public async regAdd(request: Request, response: Response){
 
+        const {cpf} = request.headers;
 
+        if (cpf) {
+            const findUser = users.find((user: any) => {
+                return user.cpf === cpf
+            });
+            if (!findUser) {
+                return response.status(404).json({ message:"Usuario não existe"});
+            }
+                const {street,number,district,state,city} = request.body;
+                    findUser.address = {street, number, district, state, city};
+                    return response.status(200).json(findUser);
+            }
+            
+
+        }
+    }
 

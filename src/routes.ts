@@ -13,4 +13,6 @@ routes.get("/age", usersController.find);
 
 routes.get("/order", usersController.order);
 
+routes.post("/regAdd", usersController.regAdd);
+
 export {routes};
