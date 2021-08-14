@@ -1,5 +1,14 @@
 import { Request, Response } from "express";
+import { UsersRepository } from "./../typeorm/repositories/UsersRepository";
 import { v4 as uuid } from "uuid";
+
+interface itodo{
+    id: string,
+    title: string,
+    deadline: string,
+    done: boolean,
+    created_at: Date,
+}
 
 interface iusers{
     id: string,
@@ -14,13 +23,7 @@ interface iusers{
         state: string,
         city: string,
     },
-    todos?:{
-        id: string,
-        title: string,
-        deadline: string,
-        done: boolean,
-        created_at: Date,
-    }
+    todos:itodo[]
 }
 
 const users: iusers[] = [];
@@ -29,49 +32,19 @@ export default class UsersController{
     public async create( request: Request, response: Response){
         const {name, email, cpf, birthDate} = request.body;
 
-        const userFindall = users.find((user: any)=>{
-            return user.name===name,
-            user.email===email, 
-            user.cpf===cpf,
-            user.birthDate===birthDate
-        });
+        const createUserRepository = new UsersRepository();
 
-        if(userFindall){
-            return response.status(200).json(userFindall);
-        }
+        const user = createUserRepository.create({name, email, cpf, birthDate});
 
-        const userFinded = users.find((user: any)=>{
-            return user.cpf===cpf
-        });
-
-        if(userFinded){
-            return response.status(200).json(userFinded);
-        }
-
-        const user = {
-            id: uuid(),
-            name,
-            email,
-            cpf,
-            birthDate,
-        }
-
-        users.push(user);
-        response.status(201).json(users);
+        
+        response.status(201).json(user);
     }
 
 
     public async search(request: Request, response: Response){
-        const {cpf} = request.headers;
+        const { user } = request;
 
-        if(cpf){
-            const user = users.find((user: any)=>{
-                return user.cpf===cpf
-            });
-                return response.status(200).json(user);
-        }
-
-            return response.status(200).json(users);
+            return response.status(200).json(user);
         
     }
 
@@ -158,5 +131,36 @@ export default class UsersController{
             
 
         }
+
+    public async todo(request: Request, response: Response){
+
+        const {cpf} = request.headers;
+
+        if (cpf){
+
+            const user = users.find((user:any)=>{
+                return user.cpf===cpf
+            });
+
+            if (!user){
+                return response.status(404).json({message:"Usuario não existe"});
+            }
+
+            const {title, deadline} = request.body
+
+            const todo = {
+                id: uuid(),
+                title,
+                deadline,
+                done:false,
+                created_at:new Date()
+            }
+
+            user.todos.push(todo);
+            response.status(201).json(user);
+        }
+
+        return response.status(404).json({message:"Erro"})
     }
+}
 
