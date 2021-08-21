@@ -1,19 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import { UsersRepository } from "../typeorm/repositories/UsersRepository";
 
+const usersRepository = new UsersRepository();
+
 export default function checksExistsUser(
     request: Request, response: Response, next: NextFunction):void{
         const { cpf } = request.headers;
 
         try {
 
-            const findUsersRepository = new UsersRepository();
+            
 
             if (!cpf){
                 throw new Error("unfilled cpf");
             }
 
-            const user = findUsersRepository.search(String(cpf));
+            const user = usersRepository.search(String(cpf));
 
             if (!user){
                 throw new Error("User not found");
