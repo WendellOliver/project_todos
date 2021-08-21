@@ -27,7 +27,11 @@ interface iusersDTO {
 class UsersRepository {
     private users: User[];
     constructor() {
-        this.users = [];
+        const data = fs.readFileSync('db.json',
+            { encoding: 'utf8', flag: 'r' });
+
+        this.users = JSON.parse(data);
+
     }
 
     create({ name, email, cpf, birthDate }: iusersDTO): User {
@@ -58,14 +62,7 @@ class UsersRepository {
 
     search(cpf: string): User | undefined {
 
-        let users: User[] = [];
-        const data = fs.readFileSync('db.json',
-            { encoding: 'utf8', flag: 'r' });
-
-
-        users = JSON.parse(data);
-
-        return users.find((user: any) => {
+        return this.users.find((user: any) => {
             return user.cpf === cpf
         });
     }

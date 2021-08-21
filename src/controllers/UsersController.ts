@@ -32,9 +32,8 @@ export default class UsersController{
     public async create( request: Request, response: Response){
         const {name, email, cpf, birthDate} = request.body;
 
-        const createUserRepository = new UsersRepository();
-
-        const user = createUserRepository.create({name, email, cpf, birthDate});
+        
+        
 
         
         response.status(201).json(user);
