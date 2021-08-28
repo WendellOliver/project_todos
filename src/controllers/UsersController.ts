@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { UsersRepository } from "./../typeorm/repositories/UsersRepository";
 import { v4 as uuid } from "uuid";
+import CreateUserService from "../services/CreateUsersServices";
+import AgeFindUsersService from  "../services/AgeFindUserServices";
+import OrderUserService from "../services/OrderUserServices";
 
 interface itodo{
     id: string,
@@ -29,86 +31,45 @@ interface iusers{
 const users: iusers[] = [];
 
 export default class UsersController{
+
     public async create( request: Request, response: Response){
+
         const {name, email, cpf, birthDate} = request.body;
 
-        
-        
+        const createUsersService = new CreateUserService();
 
+        const user = createUsersService.execute({name, email, cpf, birthDate});   
         
         response.status(201).json(user);
     }
 
-
     public async search(request: Request, response: Response){
         const { user } = request;
 
-            return response.status(200).json(user);
+        if (!user) {
+            throw new Error('User not found!');
+        }
+
+        return response.status(200).json(user);
         
     }
 
     public async find(request: Request,response: Response){
-        const data = new Date();
-        const sdia = String(data.getDate()).padStart(2, '0');
-        const smes = String(data.getMonth() + 1).padStart(2, '0');
-        const ano = data.getFullYear();
-        const dia = parseInt(sdia);
-        const mes = parseInt(smes);
-        const dataAtual = dia + '/' + mes + '/' + ano;
-        const usersAux : iusers[] = [] 
 
-        users.forEach(user => {
-            const userDate = user.birthDate.toString();
-            const Dia = userDate.substring(8,10);
-            const Mes = userDate.substring(5,7);
-            const Ano = userDate.substring(0,4);
-            const userDia = parseInt(Dia);
-            const userMes = parseInt(Mes);
-            const userAno = parseInt(Ano);
-            var qano = ano - userAno;
-            
-                if( mes < userMes|| mes == userMes && dia < userDia){
-                    qano--;
-                }
-                
-                if(qano >= 18 ){
-                    usersAux.push(user); 
-                }
-                
-        });
+        const ageFindUsersService = new AgeFindUsersService();
+        const mage = ageFindUsersService.execute();
 
-        return response.status(200).json(usersAux);
+        return response.status(200).json(mage);
 
     }
     
     public async order(request: Request,response: Response){
         const { order } = request.headers;
         
-        if(order === "desc"){
-            users.sort(function (a, b) {
-                var nameA = a.name.toUpperCase();
-                var nameB = b.name.toUpperCase();
-                if (nameA < nameB) {
-                    return 1;
-                }
-                if (nameA > nameB) {
-                    return -1;
-                }
-                return 0;
-                });
-        }else{
-            for(var i = 0; i < users.length; i++) {
-                for(var j=0; j < users.length; j++) {
-                    if(users[i].name.toUpperCase() < users[j].name.toUpperCase()) {
-                        var temp = users[i].name;
-                        users[i].name = users[j].name;
-                        users[j].name = temp;
-                    }
-                }
-            }
-        }
+        const orderUserService = new OrderUserService();
+        const user = orderUserService.execute(order:);
 
-            return response.status(200).json(users);
+            return response.status(200).json(user);
         
     }
 

@@ -5,10 +5,10 @@ const usersRepository = new UsersRepository();
 
 export default function checksExistsUser(
     request: Request, response: Response, next: NextFunction):void{
+        
         const { cpf } = request.headers;
 
         try {
-
             
 
             if (!cpf){
@@ -16,10 +16,6 @@ export default function checksExistsUser(
             }
 
             const user = usersRepository.search(String(cpf));
-
-            if (!user){
-                throw new Error("User not found");
-            }
 
             request.user = {
                 user

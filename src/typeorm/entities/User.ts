@@ -2,10 +2,10 @@ import { v4 as uuidV4 } from "uuid";
 
 class User{
     id?: string;
-    name?: string;
+    name!: string;
     email?: string;
     cpf?: string;
-    birthDate?: Date;
+    birthDate!: Date;
     address?: {
         street: string,
         number: number,

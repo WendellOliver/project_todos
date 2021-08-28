@@ -66,6 +66,10 @@ class UsersRepository {
             return user.cpf === cpf
         });
     }
+
+    findAll(): User[]{
+        return this.users;
+    }
 }
 
 
