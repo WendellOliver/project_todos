@@ -81,7 +81,7 @@ class UsersRepository {
         return this.users;
     }
 
-    addrupdate({ user, street, number, district, city, state }: IUser): User | any {
+    addrupdate({ user, street, number, district, city, state }: IUser){
 
 
         const index = this.users.findIndex(function (a) {

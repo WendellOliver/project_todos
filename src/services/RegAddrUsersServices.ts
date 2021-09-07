@@ -2,8 +2,6 @@ import { User } from '../typeorm/entities/User';
 import { UsersRepository } from "../typeorm/repositories/UsersRepository";
 
 
-const usersRepository = new UsersRepository();
-
 interface IUser {
     user: User,
     street: string,
@@ -15,13 +13,13 @@ interface IUser {
 
 class RegAddrUsersServices {
 
-    execute({ user, street, number, district, city, state }: IUser): User {
+    public execute({ user, street, number, district, city, state }: IUser): User {
 
         const usersRepository = new UsersRepository();
 
         const userAux = usersRepository.addrupdate({ user, street, number, district, city, state });
         
-        return user;
+        return userAux;
     }
 }
 
