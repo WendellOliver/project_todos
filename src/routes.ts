@@ -16,7 +16,7 @@ routes.get("/age", usersController.find);
 
 routes.get("/order", usersController.order);
 
-routes.post("/regAdd", usersController.regAdd);
+routes.post("/regAdd", checksExistsUser, usersController.regAdd);
 
 routes.post("/todo", usersController.todo);
 

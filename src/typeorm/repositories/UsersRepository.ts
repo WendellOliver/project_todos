@@ -1,12 +1,22 @@
 import { User } from "../entities/User"
 import fs from "fs"
 
+
 interface itodoDTO {
     id: string,
     title: string,
     deadline: string,
     done: boolean,
     created_at: Date,
+}
+
+interface IUser {
+    user: User,
+    street: string,
+    number: number,
+    district: string,
+    city: string,
+    state: string,
 }
 
 interface iusersDTO {
@@ -70,7 +80,41 @@ class UsersRepository {
     findAll(): User[]{
         return this.users;
     }
+
+    addrupdate({ user, street, number, district, city, state }: IUser): User | any {
+
+
+        const index = this.users.findIndex(function (a) {
+            return a.id === user.id;
+        });
+
+        if (index >= 0) {
+            this.users.splice(index, 1);
+        }
+
+        user.address = {
+            street,
+            number,
+            district,
+            city,
+            state
+        };
+
+        this.users.push(user)
+
+        fs.writeFile("db.json", JSON.stringify(this.users), function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("The file was saved!");
+            }
+        });
+
+        return user;
+    }
+
 }
+
 
 
 export { UsersRepository };

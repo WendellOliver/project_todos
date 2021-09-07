@@ -8,8 +8,10 @@ class OrderUserService{
 
         const users = usersRepository.findAll();
 
+        var usersAux: any[] = [];
+
     if(organize === "desc"){
-        users.sort(function (a, b) {
+        usersAux = users.sort(function (a, b) {
             var nameA = a.name.toUpperCase();
             var nameB = b.name.toUpperCase();
             if (nameA < nameB) {

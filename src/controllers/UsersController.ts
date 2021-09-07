@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import CreateUserService from "../services/CreateUsersServices";
 import AgeFindUsersService from  "../services/AgeFindUserServices";
 import OrderUserService from "../services/OrderUserServices";
+import RegAddrUsersServices from "../services/RegAddrUsersServices";
 
 interface itodo{
     id: string,
@@ -67,7 +68,7 @@ export default class UsersController{
         const { order } = request.headers;
         
         const orderUserService = new OrderUserService();
-        const user = orderUserService.execute(order:);
+        const user = orderUserService.execute(String(order));
 
             return response.status(200).json(user);
         
@@ -75,19 +76,16 @@ export default class UsersController{
 
     public async regAdd(request: Request, response: Response){
 
-        const {cpf} = request.headers;
+        const { user } = request.user;
 
-        if (cpf) {
-            const findUser = users.find((user: any) => {
-                return user.cpf === cpf
-            });
-            if (!findUser) {
-                return response.status(404).json({ message:"Usuario não existe"});
-            }
-                const {street,number,district,state,city} = request.body;
-                    findUser.address = {street, number, district, state, city};
-                    return response.status(200).json(findUser);
-            }
+        const { street, number, district, city, state } = request.body;
+
+        const RegAddrUsersService = new RegAddrUsersServices()
+
+        const userAux = RegAddrUsersService.execute({ user, street, number, district, city, state });
+
+        return response.status(200).json(userAux)
+
             
 
         }
