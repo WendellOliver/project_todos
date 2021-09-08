@@ -17,9 +17,9 @@ class RegAddrUsersServices {
 
         const usersRepository = new UsersRepository();
 
-        const userAux = usersRepository.addrupdate({ user, street, number, district, city, state });
+        const regAdd = usersRepository.addrupdate({ user, street, number, district, city, state });
         
-        return userAux;
+        return regAdd;
     }
 }
 

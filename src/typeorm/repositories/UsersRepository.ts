@@ -19,6 +19,7 @@ interface IUser {
     state: string,
 }
 
+
 interface iusersDTO {
     name: string,
     email: string,
@@ -30,7 +31,7 @@ interface iusersDTO {
         district: string,
         state: string,
         city: string,
-    },
+    }
     todos?: itodoDTO[]
 }
 
@@ -81,9 +82,9 @@ class UsersRepository {
         return this.users;
     }
 
-    addrupdate({ user, street, number, district, city, state }: IUser){
-
-
+    addrupdate({ user, street, number, district, city, state }: IUser): | any {
+        console.log(user);
+        console.log(this.users);
         const index = this.users.findIndex(function (a) {
             return a.id === user.id;
         });
@@ -91,7 +92,7 @@ class UsersRepository {
         if (index >= 0) {
             this.users.splice(index, 1);
         }
-
+        console.log(this.users);
         user.address = {
             street,
             number,
@@ -101,7 +102,7 @@ class UsersRepository {
         };
 
         this.users.push(user)
-
+        console.log(this.users);
         fs.writeFile("db.json", JSON.stringify(this.users), function (err) {
             if (err) {
                 console.log(err);

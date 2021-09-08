@@ -16,7 +16,7 @@ export default function checksExistsUser(
             }
 
             const user = usersRepository.search(String(cpf));
-
+            console.log("Estou aqui",user);
             request.user = {
                 user
             }

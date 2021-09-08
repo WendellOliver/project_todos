@@ -18,6 +18,6 @@ routes.get("/order", usersController.order);
 
 routes.post("/regAdd", checksExistsUser, usersController.regAdd);
 
-routes.post("/todo", usersController.todo);
+routes.post("/todo", checksExistsUser, usersController.todo);
 
 export {routes};

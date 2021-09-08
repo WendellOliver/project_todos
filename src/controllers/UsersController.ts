@@ -78,15 +78,15 @@ export default class UsersController{
 
         const { user } = request.user;
 
+        console.log(request);
+
         const { street, number, district, city, state } = request.body;
 
-        const RegAddrUsersService = new RegAddrUsersServices()
+        const regAddrUsersServices = new RegAddrUsersServices();
 
-        const userAux = RegAddrUsersService.execute({ user, street, number, district, city, state });
+        const userAux = regAddrUsersServices.execute({ user, street, number, district, city, state });
 
-        return response.status(200).json(userAux)
-
-            
+        return response.status(200).json(userAux);           
 
         }
 
