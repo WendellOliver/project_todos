@@ -4,6 +4,7 @@ import CreateUserService from "../services/CreateUsersServices";
 import AgeFindUsersService from  "../services/AgeFindUserServices";
 import OrderUserService from "../services/OrderUserServices";
 import RegAddrUsersServices from "../services/RegAddrUsersServices";
+import RegTodosService from "../services/TodoUsersServices";
 
 interface itodo{
     id: string,
@@ -78,8 +79,6 @@ export default class UsersController{
 
         const { user } = request.user;
 
-        console.log(request);
-
         const { street, number, district, city, state } = request.body;
 
         const regAddrUsersServices = new RegAddrUsersServices();
@@ -92,33 +91,16 @@ export default class UsersController{
 
     public async todo(request: Request, response: Response){
 
-        const {cpf} = request.headers;
+        const { user } = request.user;
 
-        if (cpf){
+        const { title, deadline, done } = request.body;
 
-            const user = users.find((user:any)=>{
-                return user.cpf===cpf
-            });
+        const regtodosService = new RegTodosService()
 
-            if (!user){
-                return response.status(404).json({message:"Usuario não existe"});
-            }
+        const userAux = regtodosService.execute({ user, title, deadline, done });
 
-            const {title, deadline} = request.body
+        return response.status(404).json(userAux);
 
-            const todo = {
-                id: uuid(),
-                title,
-                deadline,
-                done:false,
-                created_at:new Date()
-            }
-
-            user.todos.push(todo);
-            response.status(201).json(user);
-        }
-
-        return response.status(404).json({message:"Erro"})
     }
 }
 

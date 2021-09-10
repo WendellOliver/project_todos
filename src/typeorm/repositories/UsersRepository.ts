@@ -1,5 +1,6 @@
 import { User } from "../entities/User"
 import fs from "fs"
+import { uuid } from "uuidv4";
 
 
 interface itodoDTO {
@@ -33,6 +34,15 @@ interface iusersDTO {
         city: string,
     }
     todos?: itodoDTO[]
+}
+
+interface iusersTodo {
+    user:User
+    idtodos?: string,
+    title: string,
+    deadline: string,
+    done: boolean,
+    created_at?: any,
 }
 
 class UsersRepository {
@@ -83,8 +93,6 @@ class UsersRepository {
     }
 
     addrupdate({ user, street, number, district, city, state }: IUser): | any {
-        console.log(user);
-        console.log(this.users);
         const index = this.users.findIndex(function (a) {
             return a.id === user.id;
         });
@@ -92,7 +100,6 @@ class UsersRepository {
         if (index >= 0) {
             this.users.splice(index, 1);
         }
-        console.log(this.users);
         user.address = {
             street,
             number,
@@ -102,7 +109,6 @@ class UsersRepository {
         };
 
         this.users.push(user)
-        console.log(this.users);
         fs.writeFile("db.json", JSON.stringify(this.users), function (err) {
             if (err) {
                 console.log(err);
@@ -112,6 +118,42 @@ class UsersRepository {
         });
 
         return user;
+    }
+
+    todoupdate({ user, title, deadline, done }:iusersTodo):any {
+
+        const index = this.users.findIndex(function(a){
+            return a.id === user.id
+        });
+
+        if(index >=0){ 
+
+            this.users.splice(index,1)
+
+        }
+        
+        user.todos = {
+            
+            idtodos: uuid(),
+            title, 
+            deadline,
+            done, 
+            created_at : new Date
+        }
+        this.users.push(user)
+
+        fs.writeFile("db.json", JSON.stringify(this.users), function (err) {
+
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("The file was saved!");
+            }
+
+        });
+
+        return user;
+
     }
 
 }

@@ -13,7 +13,14 @@ class User{
         state: string,
         city: string,
     }
-    todos?:[]
+    todos?: {
+        idtodos?: string,
+        title: string,
+        deadline: string,
+        done: boolean,
+        created_at?: any,
+    }
+
     constructor(){
         if (!this.id){
             this.id = uuidV4();
